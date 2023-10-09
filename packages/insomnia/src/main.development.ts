@@ -146,7 +146,7 @@ app.on('activate', (_error, hasVisibleWindows) => {
 });
 
 const _launchApp = async () => {
-  await _trackStats();
+  // await _trackStats();
   let window: BrowserWindow;
   // Handle URLs sent via command line args
   ipcMain.once('halfSecondAfterAppStart', () => {
