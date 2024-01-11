@@ -46,7 +46,12 @@ const importCommand = (parseEntries: ParseEntry[]): ImportRequest => {
 
   // Start at 1 so we can skip the ^curl part
   for (let i = 1; i < parseEntries.length; i++) {
-    const parseEntry = parseEntries[i];
+    let parseEntry = parseEntries[i];
+    // trim leading spaces between parsed entries
+    // regex won't match otherwise (e.g.    -H 'Content-Type: application/json')
+    if (typeof parseEntry === "string") {
+      parseEntry = parseEntry.trim();
+    }
 
     if (typeof parseEntry === 'string' && parseEntry.match(/^-{1,2}[\w-]+/)) {
       const isSingleDash = parseEntry[0] === '-' && parseEntry[1] !== '-';
@@ -367,7 +372,7 @@ export const convert: Converter = rawData => {
   }
 
   // Parse the whole thing into one big tokenized list
-  const parseEntries = parse(rawData);
+  const parseEntries = parse(rawData.replace(/\n/g, " "));
 
   // ~~~~~~~~~~~~~~~~~~~~~~ //
   // Aggregate the commands //
