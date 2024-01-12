@@ -86,7 +86,7 @@ function importBasicAuthenticationFromHeader(authHeader: string) {
   const encodedAuthString = hasEncodedAuthString ? authHeader.substring(authStringIndex + 1) : '';
   const authString = Buffer.from(encodedAuthString, 'base64').toString();
   const item = {
-    type: 'basic',
+    type: 'basic' as const,
     disabled: false,
     username: RegExp(/.+?(?=\:)/).exec(authString)?.[0],
     password: RegExp(/(?<=\:).*/).exec(authString)?.[0],
@@ -102,7 +102,7 @@ function importBearerAuthenticationFromHeader(authHeader: string) {
   const authHeader2 = authHeader.replace(/\s+/, ' ');
   const tokenIndex = authHeader.indexOf(' ');
   return {
-    type: 'bearer',
+    type: 'bearer' as const,
     disabled: false,
     token: tokenIndex + 1 ? authHeader2.substring(tokenIndex + 1) : '',
     prefix: '',

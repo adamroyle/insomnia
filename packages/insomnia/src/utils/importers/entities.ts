@@ -17,7 +17,7 @@ export interface Authentication extends Comment {
   clientId?: string;
   clientSecret?: Variable;
   scope?: string;
-  type?: 'basic' | 'oauth2';
+  type?: 'basic' | 'oauth2' | 'bearer';
   grantType?: 'authorization_code' | 'password' | 'client_credentials';
   disabled?: boolean;
   username?: string;
