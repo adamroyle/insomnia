@@ -1,15 +1,9 @@
 import '../css/styles.css';
 
 import type { IpcRendererEvent } from 'electron';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Breadcrumbs,
-  Button,
-  Item,
   Link,
-  Menu,
-  MenuTrigger,
-  Popover,
   Tooltip,
   TooltipTrigger,
 } from 'react-aria-components';
@@ -17,44 +11,32 @@ import {
   LoaderFunction,
   NavLink,
   Outlet,
-  useLoaderData,
   useLocation,
   useNavigate,
   useParams,
-  useRouteLoaderData,
 } from 'react-router-dom';
 
 import {
-  getFirstName,
-  getLastName,
-  isLoggedIn,
-  logout,
   onLoginLogout,
 } from '../../account/session';
 import { isDevelopment } from '../../common/constants';
 import * as models from '../../models';
 import { isDefaultOrganization } from '../../models/organization';
 import { Settings } from '../../models/settings';
-import { isDesign } from '../../models/workspace';
 import { reloadPlugins } from '../../plugins';
 import { createPlugin } from '../../plugins/create';
 import { setTheme } from '../../plugins/misc';
 import { exchangeCodeForToken } from '../../sync/git/github-oauth-provider';
 import { exchangeCodeForGitLabToken } from '../../sync/git/gitlab-oauth-provider';
 import { submitAuthCode } from '../auth-session-provider';
-import { WorkspaceDropdown } from '../components/dropdowns/workspace-dropdown';
-import { GitHubStarsButton } from '../components/github-stars-button';
-import { Hotkey } from '../components/hotkey';
 import { Icon } from '../components/icon';
-import { InsomniaAILogo } from '../components/insomnia-icon';
 import { showError, showModal } from '../components/modals';
 import { AlertModal } from '../components/modals/alert-modal';
 import { AskModal } from '../components/modals/ask-modal';
 import { ImportModal } from '../components/modals/import-modal';
-import { LoginModal, showLoginModal } from '../components/modals/login-modal';
+import { LoginModal } from '../components/modals/login-modal';
 import {
   SettingsModal,
-  showSettingsModal,
   TAB_INDEX_PLUGINS,
   TAB_INDEX_THEMES } from '../components/modals/settings-modal';
 import { Toast } from '../components/toast';
@@ -64,7 +46,6 @@ import { NunjucksEnabledProvider } from '../context/nunjucks/nunjucks-enabled-co
 import { useSettingsPatcher } from '../hooks/use-request';
 import Modals from './modals';
 import { useOrganizationLoaderData } from './organization';
-import { WorkspaceLoaderData } from './workspace';
 
 export interface RootLoaderData {
   settings: Settings;
@@ -99,11 +80,7 @@ const getNameInitials = (name: string) => {
 const Root = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { settings } = useLoaderData() as RootLoaderData;
   const { organizations } = useOrganizationLoaderData();
-  const workspaceData = useRouteLoaderData(
-    ':workspaceId'
-  ) as WorkspaceLoaderData | null;
   const [importUri, setImportUri] = useState('');
   const patchSettings = useSettingsPatcher();
 
@@ -258,34 +235,11 @@ const Root = () => {
     );
   }, [patchSettings]);
 
-  const { organizationId, projectId, workspaceId } = useParams() as {
+  const { organizationId } = useParams() as {
     organizationId: string;
     projectId?: string;
     workspaceId?: string;
   };
-
-  const crumbs = workspaceData
-    ? [
-        {
-          id: workspaceData.activeProject._id,
-          label: workspaceData.activeProject.name,
-          node: (
-            <Link data-testid="project">
-              <NavLink
-                to={`/organization/${organizationId}/project/${workspaceData.activeProject._id}`}
-              >
-                {workspaceData.activeProject.name}
-              </NavLink>
-            </Link>
-          ),
-        },
-        {
-          id: workspaceData.activeWorkspace._id,
-          label: workspaceData.activeWorkspace.name,
-          node: <WorkspaceDropdown />,
-        },
-      ]
-    : [];
 
   return (
     <AIProvider>
