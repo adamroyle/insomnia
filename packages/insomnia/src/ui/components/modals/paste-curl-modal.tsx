@@ -38,11 +38,11 @@ export const PasteCurlModal = ({ onHide, onImport, defaultValue }: ModalProps & 
   return (
     <OverlayContainer onClick={e => e.stopPropagation()}>
       <Modal ref={modalRef} tall onHide={onHide}>
-        <ModalHeader>Paste Curl to import request</ModalHeader>
+        <ModalHeader>Paste Curl or Fetch to import request</ModalHeader>
         <ModalBody className="">
           <CodeEditor
             id="paste-curl-content"
-            placeholder="Paste curl request here"
+            placeholder="Paste curl or fetch request here"
             className=" border-top"
             mode="text"
             dynamicHeight

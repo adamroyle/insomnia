@@ -1,5 +1,6 @@
 import { Importer } from '../entities';
 import * as curl from './curl';
+import * as fetch from './fetch';
 import * as har from './har';
 import * as insomnia1 from './insomnia-1';
 import * as insomnia2 from './insomnia-2';
@@ -20,6 +21,7 @@ export const importers: Importer[] = [
   postman,
   postmanenv,
   har,
+  fetch,
   curl,
   swagger2,
   openapi3,
